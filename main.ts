@@ -12,14 +12,19 @@ function load(url: string) {
         let xhr = new XMLHttpRequest();
 
         xhr.addEventListener("load", () => {
-            let data = JSON.parse(xhr.responseText);
-            observer.next(data);
-            observer.complete();
+            if (xhr.status === 200) {
+                let data = JSON.parse(xhr.responseText);
+                observer.next(data);
+                observer.complete();
+            } else {
+                observer.error(xhr.statusText);
+            }
+
         });
 
         xhr.open("GET", url);
         xhr.send();
-    });
+    }).retry(3);
 }
 
 function renderMovies(movies) {
@@ -30,11 +35,8 @@ function renderMovies(movies) {
     });
 }
 
-//this code doesn't request server for movies.json until someone will subscribe to it
-load("movies.json");
-
 // with map we'll get stream of 'streams' instead of flatMap give us stream of movies
-click.flatMap(e => load("movies.json"))
+click.flatMap(e => load("movies_WRONG.json"))
     .subscribe(
         renderMovies,
         e => console.log(`error: ${e}`),
