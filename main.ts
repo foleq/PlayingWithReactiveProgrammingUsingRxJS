@@ -27,6 +27,14 @@ function load(url: string) {
     }).retryWhen(retryStrategy({ attempts: 3, delay: 1500 }));
 }
 
+//Google check -> web hypertext application technology fetch // not all browsers supports fetch
+function loadWithFetch(url: string) {
+    //to get lazy loading(do request only if someone subscribe) we need to use defer
+    return Observable.defer(() => {
+        return Observable.fromPromise(fetch(url).then(response => response.json()));
+    });
+}
+
 function retryStrategy({ attempts = 4, delay = 1000 }) {
     return function(errors) {
         return errors
@@ -48,7 +56,7 @@ function renderMovies(movies) {
 }
 
 // with map we'll get stream of 'streams' instead of flatMap give us stream of movies
-click.flatMap(e => load("movies_WRONG.json"))
+click.flatMap(e => loadWithFetch("movies.json"))
     .subscribe(
         renderMovies,
         e => console.log(`error: ${e}`),
