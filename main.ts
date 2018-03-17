@@ -15,12 +15,14 @@ function renderMovies(movies) {
 }
 
 // this will load data on start of website
-loadWithFetch("moviess.json")
+let subscription = load("moviess.json")
     .subscribe(
         renderMovies,
         e => console.log(`error: ${e}`),
         () => console.log("complete")
     );
+console.log(subscription);
+//subscription.unsubscribe();
 
 // with map we'll get stream of 'streams' instead of flatMap give us stream of movies
 click.flatMap(e => loadWithFetch("movies.json"))
