@@ -1,0 +1,24 @@
+ReactiveX - An API for asynchronous programming with observable streams.
+Documentation RxJS - http://reactivex.io/rxjs/
+	Read about operators - http://reactivex.io/documentation/operators.html - http://reactivex.io/documentation/operators/flatmap.html
+
+
+-------------------------- This example is prepared from https://gist.github.com/staltz/868e7e9bc2a7b8c1f754 --------------------------
+Reactive Programming - is programming with asynchronous data streams.
+
+Stream - sequence of ongoing events ordered in time. Capture emitted events asynchronously, by defining a function that will execute when:
+	a) value is emitted b) error is emitted c) 'completed' is emitted
+	Subscribing - "listening" to the stream
+Observers - functions we are defining
+Subject(or "observable") - stream being observed
+
+clickStream.map(f) -> returns new stream based on the click stream and function e.g. map to number 1 on each click
+	.scan(g) -> aggreagtes all prveious values on stream to x = g(acumulated, current) e.g. g was add function
+	
+Count double clicks: buffer(clickStream.throttle(250ms))) -> map('get length of list') -> filter(x >= 2)
+
+Promise - simply an Observable(stream) with one single emitted value. Rx streams allow many returned values.
+
+
+
+
