@@ -26,7 +26,14 @@ export function load(url: string) {
 export function loadWithFetch(url: string) {
     //to get lazy loading(do request only if someone subscribe) we need to use defer
     return Observable.defer(() => {
-        return Observable.fromPromise(fetch(url).then(response => response.json()));
+        return Observable.fromPromise(
+            fetch(url).then(response => {
+                if(response.status === 200) {
+                    return response.json();
+                } else {
+                    return Promise.reject(response);
+                }
+            }));
     });
 }
 

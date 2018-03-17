@@ -1,24 +1,6 @@
 import { Observable } from "rxjs";
 import { load, loadWithFetch } from "./loader"
 
-let source = Observable.merge(
-    Observable.of(1),
-    Observable.from([2, 3, 4]),
-    Observable.throw(new Error("Stop!")),
-    Observable.of(5)
-).catch(e => {
-    console.log(`caught: ${e}`);
-    return Observable.of(10);
-});
-
-source.subscribe(
-    value => console.log(`value: ${value}`),
-    error => console.log(`error: ${error}`),
-    () => console.log("complete")
-)
-
-
-/*
 let output = document.getElementById("output");
 let button = document.getElementById("button");
 
@@ -32,6 +14,14 @@ function renderMovies(movies) {
     });
 }
 
+// this will load data on start of website
+loadWithFetch("moviess.json")
+    .subscribe(
+        renderMovies,
+        e => console.log(`error: ${e}`),
+        () => console.log("complete")
+    );
+
 // with map we'll get stream of 'streams' instead of flatMap give us stream of movies
 click.flatMap(e => loadWithFetch("movies.json"))
     .subscribe(
@@ -39,4 +29,3 @@ click.flatMap(e => loadWithFetch("movies.json"))
         e => console.log(`error: ${e}`),
         () => console.log("complete")
     );
-*/
