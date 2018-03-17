@@ -1,51 +1,27 @@
 import { Observable } from "rxjs";
+import { load, loadWithFetch } from "./loader"
 
+let source = Observable.create(observer => {
+    observer.next(1);
+    observer.next(2);
+    observer.error("Stop!");
+    //throw new Error("Stop!");
+    observer.next(3);
+    observer.complete();
+});
+
+source.subscribe(
+    value => console.log(`value: ${value}`),
+    error => console.log(`error: ${error}`),
+    () => console.log("complete")
+)
+
+
+/*
 let output = document.getElementById("output");
 let button = document.getElementById("button");
 
 let click = Observable.fromEvent(button, "click");
-
-function load(url: string) {
-
-    return Observable.create(observer => {
-
-        let xhr = new XMLHttpRequest();
-
-        xhr.addEventListener("load", () => {
-            if (xhr.status === 200) {
-                let data = JSON.parse(xhr.responseText);
-                observer.next(data);
-                observer.complete();
-            } else {
-                observer.error(xhr.statusText);
-            }
-
-        });
-
-        xhr.open("GET", url);
-        xhr.send();
-    }).retryWhen(retryStrategy({ attempts: 3, delay: 1500 }));
-}
-
-//Google check -> web hypertext application technology fetch // not all browsers supports fetch
-function loadWithFetch(url: string) {
-    //to get lazy loading(do request only if someone subscribe) we need to use defer
-    return Observable.defer(() => {
-        return Observable.fromPromise(fetch(url).then(response => response.json()));
-    });
-}
-
-function retryStrategy({ attempts = 4, delay = 1000 }) {
-    return function(errors) {
-        return errors
-            .scan((acc, value) => {
-                console.log(acc, value)
-                return acc + 1;
-            }, 0)
-            .takeWhile(acc => acc < attempts)
-            .delay(delay);
-    }
-}
 
 function renderMovies(movies) {
     movies.forEach(m => {
@@ -62,3 +38,4 @@ click.flatMap(e => loadWithFetch("movies.json"))
         e => console.log(`error: ${e}`),
         () => console.log("complete")
     );
+*/
